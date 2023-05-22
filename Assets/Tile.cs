@@ -1,5 +1,5 @@
 ﻿using BoardGame;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Tile : TileParent {
@@ -15,17 +15,68 @@ public class Tile : TileParent {
 
     public GameObject portal;
     public GameObject checkPoint;
+    public GameObject pathObject;
+
+    private Vector2Int key;
 
     private bool portalExists = false;
     private bool checkpointExists = false;
 
     [SerializeField] public int cost = 1;
 
+    public bool IsPath;
+    public bool evaluated;
+    public Tile previousTile;
+
+    public List<Tile> GetNeighbours(Board board)
+    {
+        List<Tile> neighbours = new List<Tile>();
+
+        if (board.TryGetTile(new Vector2Int(key.x - 1, key.y), out Tile neighbourLeft))
+        {
+            if (!neighbourLeft.IsBlocked)
+                neighbours.Add(neighbourLeft);
+        }
+        if (board.TryGetTile(new Vector2Int(key.x + 1, key.y), out Tile neighbourRight))
+        {
+            if (!neighbourRight.IsBlocked)
+                neighbours.Add(neighbourRight);
+
+        }
+        if (board.TryGetTile(new Vector2Int(key.x, key.y - 1), out Tile neighbourDown))
+        {
+            if (!neighbourDown.IsBlocked)
+                neighbours.Add(neighbourDown);
+
+        }
+        if (board.TryGetTile(new Vector2Int(key.x, key.y + 1), out Tile neighbourUp))
+        {
+            if (!neighbourUp.IsBlocked)
+                neighbours.Add(neighbourUp);
+        }
+
+        return neighbours;
+    }
+
+    public void ResetProperties()
+    {
+        if(IsObstacle(out int penalty)){
+            cost = penalty;
+        } else {
+            cost = 1;
+        }
+
+        previousTile = null;
+        evaluated = false;
+        IsPath = false;
+    }
+
     // This function is called when something has changed on the board. All 
     // tiles have been created before it is called.
     public override void OnSetup(Board board) {
+
         // 2. Each tile has a unique 'coordinate'
-        Vector2Int key = Coordinate;
+        key = Coordinate;
         
         // 3. Tiles can have different modifiers
         if (IsBlocked) {
@@ -45,11 +96,15 @@ public class Tile : TileParent {
                 checkpointExists = true;
             }
         }
+        else
+        {
+            checkPoint.SetActive(false);
+        }
         
         if (IsStartPoint) {
             
         }
-        
+   
         if (IsPortal(out Vector2Int destination)) {
             portal.SetActive(true);
 
@@ -64,10 +119,19 @@ public class Tile : TileParent {
         {
             portal.SetActive(false);
         }
+        if (IsPath)
+        {
+            pathObject.SetActive(true);
+        }
+        else
+        {
+            pathObject.SetActive(false);
+        }
        
-        // 4. Other tiles can be accessed through the 'board' instance
-        if (board.TryGetTile(new Vector2Int(2, 1), out Tile otherTile)) {
-            
+        // DO NOT REMOVE
+        if(board.TryGetTile(new Vector2Int(2, 1), out Tile otherTile))
+        {
+
         }
         
         // 5. Change the material color if this tile is blocked
