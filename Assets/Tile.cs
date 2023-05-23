@@ -35,24 +35,30 @@ public class Tile : TileParent {
         if (board.TryGetTile(new Vector2Int(key.x - 1, key.y), out Tile neighbourLeft))
         {
             if (!neighbourLeft.IsBlocked)
+            {
                 neighbours.Add(neighbourLeft);
+            }
         }
         if (board.TryGetTile(new Vector2Int(key.x + 1, key.y), out Tile neighbourRight))
         {
             if (!neighbourRight.IsBlocked)
+            {
                 neighbours.Add(neighbourRight);
-
+            }
         }
         if (board.TryGetTile(new Vector2Int(key.x, key.y - 1), out Tile neighbourDown))
         {
             if (!neighbourDown.IsBlocked)
+            {
                 neighbours.Add(neighbourDown);
-
+            }
         }
         if (board.TryGetTile(new Vector2Int(key.x, key.y + 1), out Tile neighbourUp))
         {
             if (!neighbourUp.IsBlocked)
+            {
                 neighbours.Add(neighbourUp);
+            }
         }
 
         return neighbours;
@@ -60,10 +66,11 @@ public class Tile : TileParent {
 
     public void ResetProperties()
     {
+        
         if(IsObstacle(out int penalty)){
             cost = penalty;
         } else {
-            cost = 1;
+            cost = int.MaxValue;
         }
 
         previousTile = null;
