@@ -23,10 +23,12 @@ public class Tile : TileParent {
     private bool checkpointExists = false;
 
     [SerializeField] public int cost = 1;
+    [SerializeField] public int costToStart;
 
     public bool IsPath;
-    public bool evaluated;
     public Tile previousTile;
+
+
 
     public List<Tile> GetNeighbours(Board board)
     {
@@ -66,15 +68,15 @@ public class Tile : TileParent {
 
     public void ResetProperties()
     {
-        
-        if(IsObstacle(out int penalty)){
+        if (IsObstacle(out int penalty))
+        {
             cost = penalty;
-        } else {
-            cost = int.MaxValue;
+        } else
+        {
+            cost = 1;
         }
-
+        costToStart = int.MaxValue;
         previousTile = null;
-        evaluated = false;
         IsPath = false;
     }
 
