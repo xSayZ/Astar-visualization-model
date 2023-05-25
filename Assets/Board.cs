@@ -15,6 +15,8 @@ public class Board : BoardParent
     // is modified.
     public override void SetupBoard()
     {
+        checkpoints = new List<Tile>();
+
         // 1. Get the size of the board
         var boardSize = BoardSize;
 
@@ -48,7 +50,10 @@ public class Board : BoardParent
         foreach (Tile checkpointTile in checkpoints)
         {
             if (startTile == null)
+            {
+                Debug.LogError("Start tile is null");
                 return;
+            }
 
             EvaluateDijkstra(startTile);
             GetShortestPath();
@@ -75,15 +80,15 @@ public class Board : BoardParent
         int moved = 0;
 
         // Only runs if there are tiles to be searched
-        while (searchTiles.Any() && maxSteps > moved)
+        while (searchTiles.Any() && (numberOfCheckpoints >= checkpointsFound || maxSteps > moved))
         {
-
             // Gets the neighbours
             var currentNeighbours = searchTiles[0].GetNeighbours(this);
 
             if (searchTiles[0].IsCheckPoint)
             {
                 checkpointsFound++;
+                Debug.Log("Checkpoints: " + checkpointsFound);
             }
             if(searchTiles[0].costToStart > moved)
             {
@@ -98,12 +103,21 @@ public class Board : BoardParent
                     searchTiles.Add(neighbouringTile);
                     neighbouringTile.costToStart = neighbouringTile.previousTile.costToStart + neighbouringTile.cost;
                 }
-                else if (neighbouringTile.costToStart > searchTiles[0].cost + neighbouringTile.cost)
-                {
-                    neighbouringTile.previousTile = searchTiles[0];
-                    searchTiles.Add(neighbouringTile);
-                    neighbouringTile.costToStart = neighbouringTile.previousTile.costToStart + neighbouringTile.cost;
-                }
+                //else
+                //{
+                //    if (neighbouringTile.costToStart > searchTiles[0].cost + neighbouringTile.cost)
+                //    {
+                //        var dont = false;
+                //        if (!dont)
+                //        {
+                //            neighbouringTile.previousTile = searchTiles[0];
+                //            searchTiles.Add(neighbouringTile);
+                //            neighbouringTile.costToStart = neighbouringTile.previousTile.costToStart + neighbouringTile.cost;
+                //            Debug.Log("Test");
+                //            dont = true;
+                //        }
+                //    }
+                //}
             }
 
             completedTiles.Add(searchTiles[0]);
@@ -119,13 +133,17 @@ public class Board : BoardParent
     {
         foreach(Tile checkpoint in checkpoints)
         {
+            Debug.Log("Get Shortest Path, for-each running");
             Tile current = checkpoint;
 
+           Debug.Log(checkpoint);
            while(current != startTile)
            {
                current = current.previousTile;
+               Debug.Log("Get Shortest Path, while-roop running");
                current.IsPath = true;
            }
+
         }
     }
 }

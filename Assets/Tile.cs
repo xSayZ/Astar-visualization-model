@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Tile : TileParent {
-    
+
     // 1. TileParent extends MonoBehavior, so you can add member variables here
     // to store data.
     public Material regularMaterial;
@@ -62,8 +62,12 @@ public class Tile : TileParent {
                 neighbours.Add(neighbourUp);
             }
         }
+        if (IsPortal(out Vector2Int destination))
+        {
 
-        return neighbours;
+        }
+
+            return neighbours;
     }
 
     public void ResetProperties()
