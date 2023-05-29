@@ -14,16 +14,18 @@ public class Tile : TileParent {
     public Material blockedMaterial;
 
     public GameObject portal;
+    public GameObject portalExit;
     public GameObject checkPoint;
     public GameObject pathObject;
+    public GameObject rangeObject;
 
     private Vector2Int key;
 
     private bool portalExists = false;
     private bool checkpointExists = false;
 
-    [SerializeField] public int cost = 1;
-    [SerializeField] public int costToStart;
+    public int cost = 1;
+    public int costToStart;
 
     public bool IsPath;
     public Tile previousTile;
@@ -34,28 +36,28 @@ public class Tile : TileParent {
     {
         List<Tile> neighbours = new List<Tile>();
 
-        if (board.TryGetTile(new Vector2Int(key.x - 1, key.y), out Tile neighbourLeft))
+        if (board.TryGetTile(new Vector2Int(coordinate.x - 1, coordinate.y), out Tile neighbourLeft))
         {
             if (!neighbourLeft.IsBlocked)
             {
                 neighbours.Add(neighbourLeft);
             }
         }
-        if (board.TryGetTile(new Vector2Int(key.x + 1, key.y), out Tile neighbourRight))
+        if (board.TryGetTile(new Vector2Int(coordinate.x + 1, coordinate.y), out Tile neighbourRight))
         {
             if (!neighbourRight.IsBlocked)
             {
                 neighbours.Add(neighbourRight);
             }
         }
-        if (board.TryGetTile(new Vector2Int(key.x, key.y - 1), out Tile neighbourDown))
+        if (board.TryGetTile(new Vector2Int(coordinate.x, coordinate.y - 1), out Tile neighbourDown))
         {
             if (!neighbourDown.IsBlocked)
             {
                 neighbours.Add(neighbourDown);
             }
         }
-        if (board.TryGetTile(new Vector2Int(key.x, key.y + 1), out Tile neighbourUp))
+        if (board.TryGetTile(new Vector2Int(coordinate.x, coordinate.y + 1), out Tile neighbourUp))
         {
             if (!neighbourUp.IsBlocked)
             {
@@ -64,29 +66,18 @@ public class Tile : TileParent {
         }
         if (IsPortal(out Vector2Int destination))
         {
-
+            board.TryGetTile(new Vector2Int(destination.x, destination.y), out var portalDestination);
+            neighbours.Add(portalDestination);
         }
 
-            return neighbours;
-    }
-
-    public void ResetProperties()
-    {
-        if (IsObstacle(out int penalty))
-        {
-            cost = penalty;
-        } else
-        {
-            cost = 1;
-        }
-        costToStart = int.MaxValue;
-        previousTile = null;
-        IsPath = false;
+        return neighbours;
     }
 
     // This function is called when something has changed on the board. All 
     // tiles have been created before it is called.
     public override void OnSetup(Board board) {
+
+        previousTile = this;
 
         // 2. Each tile has a unique 'coordinate'
         key = Coordinate;
@@ -123,8 +114,14 @@ public class Tile : TileParent {
 
             if (!portalExists)
             {
-                portal = Instantiate(portal, transform.position + new Vector3(0, 0.6f), transform.rotation, transform);
+                portal = Instantiate(portal, transform.position + new Vector3(0, 0.6f), Quaternion.identity, transform);
                 portalExists = true;
+            }
+
+            // DO NOT REMOVE
+            if (board.TryGetTile(destination, out Tile portalDestinationTile))
+            {
+                portalDestinationTile.portalExit.SetActive(true);
             }
 
         }
@@ -139,12 +136,7 @@ public class Tile : TileParent {
         else
         {
             pathObject.SetActive(false);
-        }
-       
-        // DO NOT REMOVE
-        if(board.TryGetTile(new Vector2Int(2, 1), out Tile otherTile))
-        {
-
+        
         }
         
         // 5. Change the material color if this tile is blocked
@@ -169,6 +161,24 @@ public class Tile : TileParent {
     // This function is called during the regular 'Update' step, but also gives
     // you access to the 'board' instance.
     public override void OnUpdate(Board board) {
-        
+
+        var rangevisualization = true;
+        if(costToStart <= board.maxSteps)
+        {
+            rangevisualization = true;
+        }
+        else
+        {
+            rangevisualization = false;
+        }
+
+        if (rangevisualization)
+        {
+            rangeObject.SetActive(true);
+        }
+        else
+        {
+            rangeObject.SetActive(false);
+        }
     }
 }
