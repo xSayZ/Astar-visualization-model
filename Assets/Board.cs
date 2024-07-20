@@ -41,7 +41,7 @@ public class Board : BoardParent
         }
 
         // If there is a startTile and there are checkpoints, run Djikstras
-        if (startTile != null)
+        if (startTile != null && checkpoints.Count > 0)
         {
             EvaluateDijkstra(startTile);
             // For every tile in checkpoints, get the shortest path
@@ -58,6 +58,12 @@ public class Board : BoardParent
     /// <param name="startTile"> The Start Tile</param>
     private void EvaluateDijkstra(Tile start)
     {
+        foreach(Tile tile in Tiles)
+        {
+            tile.previousTile = null;
+            tile.costToStart = int.MaxValue;
+        }
+
         // The list of tiles to be searched
         var searchTiles = new List<Tile>();
 
@@ -121,7 +127,13 @@ public class Board : BoardParent
 
             completedTiles.Add(searchTiles[0]); // The tile that has been evaluated needs to be added to the list of completed tiles
             searchTiles.Remove(searchTiles[0]); // Removes the tile from the search tiles
-           
+
+            //Writes out if not all checkpoints could be found.
+            if (!searchTiles.Any() && checkpointsFound != checkpoints.Count)
+            {
+                Debug.Log("Couldn't reach all checkpoints!");
+            }
+
         }
     }
 
@@ -145,10 +157,12 @@ public class Board : BoardParent
             if(current.previousTile != null)
             {
                 // If the current isnt startTile
-                while (current != startTile)
+                while (current != startTile && !current.IsBlocked)
                 {
                     current = current.previousTile;
+
                     current.IsPath = true;
+                    
                 }
             }
 

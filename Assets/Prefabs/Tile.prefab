@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 51eaefde625c19a42b82bb29abb96254, type: 2}
+  - {fileID: 2100000, guid: 46d544582dea8074bbf0d155d10eba1c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -257,7 +257,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 51eaefde625c19a42b82bb29abb96254, type: 2}
+  - {fileID: 2100000, guid: 46d544582dea8074bbf0d155d10eba1c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -319,7 +319,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5186750046392519288}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.67, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 0.2, y: 0.1, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -354,7 +354,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 189cb9f61e9670449b4db204ba67de03, type: 2}
+  - {fileID: 2100000, guid: 51eaefde625c19a42b82bb29abb96254, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -451,7 +451,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 51eaefde625c19a42b82bb29abb96254, type: 2}
+  - {fileID: 2100000, guid: 46d544582dea8074bbf0d155d10eba1c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -679,7 +679,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 51eaefde625c19a42b82bb29abb96254, type: 2}
+  - {fileID: 2100000, guid: 46d544582dea8074bbf0d155d10eba1c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -808,11 +808,14 @@ MonoBehaviour:
   checkpointMaterial: {fileID: 2100000, guid: 87bf8073749938a49a91f94a2bb9567e, type: 2}
   startpointMaterial: {fileID: 2100000, guid: 70ed237a0ac0f0540865dfd3ff7912b8, type: 2}
   blockedMaterial: {fileID: 2100000, guid: 189cb9f61e9670449b4db204ba67de03, type: 2}
+  stepsMaterial: {fileID: 2100000, guid: 46d544582dea8074bbf0d155d10eba1c, type: 2}
   portal: {fileID: 2467809528827815158, guid: 52a2122321eb6c64999c35d8c17faeb3, type: 3}
   portalExit: {fileID: 5864383385755642053}
   checkPoint: {fileID: 6887073153500334126, guid: 9b1eab2bc8b9bbd4491aeff500343c0d, type: 3}
   pathObject: {fileID: 5186750046392519288}
   rangeObject: {fileID: 7775748936660938305}
+  blockedObject: {fileID: 8030343636716059786, guid: c2106b6da67c4864e8201b92da3274d3, type: 3}
+  obstacleObject: {fileID: 5176902822217805745, guid: 31886f94bbab7c34ca3f2d70f4ecaf02, type: 3}
   cost: 1
   costToStart: 0
   IsPath: 0
